@@ -5,7 +5,7 @@ import datetime
 import pickle
 
 # Load the CSV file with the car data
-cars_df = pd.read_csv("./AB_US_2020.csv")
+pred_df = pd.read_csv("./AB_US_2020.csv")
 
 # Write the title of the application on the UI
 st.write("""
@@ -13,20 +13,23 @@ st.write("""
 """)
 
 # Function to make the prediction using the pre-trained model
-def model_pred(reviews, lat, long):
+def model_pred(reviews, lat, long, id):
 
     ## Load the pre-trained model using pickle
-    with open("car_pred", "rb") as file:
+    with open("db", "rb") as file:
         reg_model = pickle.load(file)
 
     # Prepare the input features
-    input_features = [[reviews, lat, long]]
+    input_features = [[reviews, lat, long, id]]
     return reg_model.predict(input_features)
 
 # Create two columns in the UI
 col1, col2, col3 = st.columns(3)
 
 row1, row2 = st.columns(2)
+
+# Create a textbox to search for the id
+id = row1.text_input("ID")
 
 # Create a slider to set the engine power
 lat = row1.slider("Latitude",
@@ -40,6 +43,10 @@ long = row1.slider("Longitude",
 reviews = row1.slider("Reviews / Month",
                         0, 10, step=1) 
 
+
+
+
+
 # Create a button to trigger the prediction
 if(st.button("Predict Price")):
 #   # Encode the categorical variables
@@ -47,7 +54,7 @@ if(st.button("Predict Price")):
 #     transmission_type = encode_dict['transmission_type'][transmission_type]
 
     # Make the prediction
-    price = model_pred(reviews, lat, long)
+    price = model_pred(reviews, lat, long, id)
     
      # Display the result on the UI
     st.text("Predicted price: "+ str(price))
