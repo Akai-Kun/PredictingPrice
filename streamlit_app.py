@@ -16,7 +16,7 @@ st.write("""
 def model_pred(reviews, lat, long, id):
 
     ## Load the pre-trained model using pickle
-    with open("db", "rb") as file:
+    with open("USA_database.ipynb", "rb") as file:
         reg_model = pickle.load(file)
 
     # Prepare the input features
@@ -32,15 +32,15 @@ row1, row2 = st.columns(2)
 id = row1.text_input("ID")
 
 # Create a slider to set the engine power
-lat = row1.slider("Latitude",
+latitude = row1.slider("Latitude",
                         0, 50, step=1)
 
 # Create a slider to set the engine power
-long = row1.slider("Longitude",
+longitude = row1.slider("Longitude",
                         -200, 0, step=1)
 
 # Create a slider to set the engine power
-reviews = row1.slider("Reviews / Month",
+reviews_per_month = row1.slider("Reviews / Month",
                         0, 10, step=1) 
 
 
@@ -54,7 +54,7 @@ if(st.button("Predict Price")):
 #     transmission_type = encode_dict['transmission_type'][transmission_type]
 
     # Make the prediction
-    price = model_pred(reviews, lat, long, id)
+    price = model_pred(reviews_per_month, latitude, longitude, id)
     
      # Display the result on the UI
     st.text("Predicted price: "+ str(price))
